@@ -1,0 +1,15 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.vsix
+*.suo
+*.cache
+*.vshost.exe*
+*.sdf
+*.dbmdl
