@@ -7,6 +7,8 @@ import pandas as pd
 import seaborn as sb
 import numpy as np
 from keras_tuner.tuner import RandomSearch
+from tabnanny import verbose
+
 
 ################### LOADING & PRE-PROCESSING CIFAR10 DATASET #########################
 
