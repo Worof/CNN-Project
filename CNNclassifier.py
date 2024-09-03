@@ -35,32 +35,31 @@ for i in range(10):
     plt.yticks([])
     plt.grid(True)
     plt.imshow(train_images[i], cmap=plt.cm.binary)
-    plt.xlabel(class_names[train_labels[i][0]])
+    plt.xlabel(class_names[np.argmax(train_labels[i])])
 plt.show()
 
 ####################### BUILDING A CUSTOMISED CNN MODEL #############
 def model_build(hp):
-    model = models.Sequential()
-    model.add(layers.Conv2D(hp.Int('conv1_units', min_value=32, max_value=128, step=16), (3,3), activation='relu', input_shape=(32,32,3)))
-    model.add(layers.MaxPooling2D((2,2)))
-    model.add(layers.Conv2D(hp.Int('conv2_units', min_value=32, max_value=128, step=16), (3,3), activation='relu'))
-    model.add(layers.MaxPooling2D((2,2)))
-    model.add(layers.Conv2D(hp.Int('conv3_units', min_value=32, max_value=128, step=16), (3,3), activation='relu'))
-    model.add(layers.Flatten())
-    model.add(layers.Dense(hp.Int('dense_units', min_value=32, max_value=128, step=16), activation='relu'))
-    model.add(layers.Dropout(hp.Float('dropout_rate', min_value=0.0, max_value=0.5, step=0.1)))
-    model.add(layers.Dense(10))
-    ##############PRINTING THE MODEL SUMMARY ###############
-    model.summary()
-    ###############COMPILING & Optimizing THE CNN MODEL ###############
-    optimizer = tf.keras.optimizers.Adam(learning_rate=hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4]))
-    
-    model.compile(optimizer='adam', loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),metrics=['accuracy'])
+    model = models.Sequential([
+        layers.Conv2D(hp.Int('conv1_units', min_value=32, max_value=128, step=16), (3,3), activation='relu', input_shape=(32,32,3)),
+        layers.BatchNormalization(),
+        layers.MaxPooling2D((2,2)),
+        layers.Conv2D(hp.Int('conv2_units', min_value=32, max_value=128, step=16), (3,3), activation='relu'),
+        layers.BatchNormalization(),
+        layers.MaxPooling2D((2,2)),
+        layers.Conv2D(hp.Int('conv3_units', min_value=32, max_value=128, step=16), (3,3), activation='relu'),
+        layers.BatchNormalization(),
+        layers.Flatten(),
+        layers.Dense(hp.Int('dense_units', min_value=32, max_value=128, step=16), activation='relu'),
+        layers.Dropout(hp.Float('dropout_rate', min_value=0.0, max_value=0.5, step=0.1)),
+        layers.Dense(10, activation='softmax')
+    ])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
 #############DEFINING THE TUNER ###############
 tuner = RandomSearch(
-    build_model,
+    model_build,
     objective='val_accuracy',
     max_trials=10,
     executions_per_trial=1,
@@ -81,7 +80,7 @@ print(f'\n Test accuracy is: {test_acc}')
 
 ##################### PLOTTING THE ACCURACY AND VALIDATION VALUES #################
 
-plt.figure(figsize=(8,6))
+plt.figure(figsize=(10,5))
 
 plt.subplot(1,2,1)
 plt.plot(history.history['accuracy'], label='accuracy')
@@ -92,7 +91,10 @@ plt.ylim([0,1])
 plt.legend(loc='lower right')
 plt.title('Training and Validation Accuracy')
 plt.grid(True)
+plt.legend()
 
+
+plt.subplot(1,2,2)
 plt.plot(history.history['loss'], label='loss')
 plt.plot(history.history['val_loss'], label='val_loss')
 plt.xlabel('Epochs')
@@ -101,41 +103,10 @@ plt.ylim([0,1])
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.grid(True)
+plt.legend()
 
 
+plt.tight_layout()
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
 
     
