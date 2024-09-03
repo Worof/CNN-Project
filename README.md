@@ -1,7 +1,6 @@
 ﻿# 🌟 CIFAR-10 Image Classification with CNN 🌟
 
 This project demonstrates how to build and optimize a Convolutional Neural Network (CNN) for classifying images from the CIFAR-10 dataset. 
-![CIFAR-10 Sample](images/cifar10_sample.png "Sample Images from CIFAR-10")
 
 
 ## 📘 Project Description
@@ -26,9 +25,7 @@ The project utilizes a variety of Python libraries that are essential for data h
 - NumPy for numerical operations.
 - Keras Tuner for optimizing model hyperparameters.
 
-You can install these libraries using pip:
-```bash
-pip install tensorflow keras matplotlib pandas seaborn numpy keras-tuner
+
 ## 📁 Files Included
 - `README.md`: Project description and setup instructions.
 - `main_script.py`: Contains the entire script for model training, evaluation, and plotting.
