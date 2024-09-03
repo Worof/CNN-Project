@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sb
 import numpy as np
-from keras_tuner.tuner import RandomSearch
+from kerastuner.tuners import RandomSearch
 from tabnanny import verbose
+from tensorflow.keras.utils import to_categorical
+
 
 
 ################### LOADING & PRE-PROCESSING CIFAR10 DATASET #########################
@@ -17,6 +19,9 @@ from tabnanny import verbose
 ##################### DATASET NORMALIZATION ##############
 train_images = train_images / 255.0
 test_images = test_images / 255.0
+################ONE HOT ENCODING##########
+train_labels = to_categorical(train_labels, 10)
+test_labels = to_categorical(test_labels, 10)
 
 ############ DEFINING THE CLASSES ###########
 class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
